@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TURSUNZODA SHOP | OFFICIAL PREMIUM V5.0</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #d4af37; /* Gold Main */
+            --bg-dark: #011613; /* Deep Emerald */
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff3e3e;
+            --text-gray: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            margin: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- UI Elements --- */
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+            color: #000;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-gold:active { transform: scale(0.93); opacity: 0.95; }
+
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        /* --- Screens --- */
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 120px;
+            width: 100%;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeInSlide 0.6s ease;
+        }
+
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Navigation --- */
+        .bottom-nav {
+            background: rgba(1, 22, 19, 0.92);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 500;
+            padding: 12px 24px 32px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 35px 35px 0 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: rgba(255,255,255,0.3);
+            transition: 0.3s;
+        }
+
+        .nav-item.active { color: var(--primary); }
+
+        /* --- Product System --- */
+        .p-card { transition: 0.4s; position: relative; }
+        .p-card:active { transform: scale(0.96); }
+        .badge-new {
+            background: var(--accent);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 900;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 20;
+            box-shadow: 0 5px 15px rgba(255, 62, 62, 0.4);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* --- Info Header Icon --- */
+        .info-header-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: var(--primary);
+        }
+
+        /* --- Developer Screen Styles --- */
+        .dev-badge {
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen -->
+    <div id="splash" class="fixed inset-0 z-[1000] bg-[#011613] flex flex-col items-center justify-center">
+        <div class="relative mb-8">
+            <div class="w-28 h-28 border-[3px] border-primary/20 border-t-primary rounded-full animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <i class="fas fa-crown text-primary text-3xl animate-pulse"></i>
+            </div>
+        </div>
+        <h1 style="font-family: 'Playfair Display', serif;" class="text-4xl font-black italic tracking-tighter text-white">TURSUNZODA <span class="text-primary">SHOP</span></h1>
+        <p class="text-[10px] uppercase tracking-[0.5em] mt-4 text-primary opacity-60">Luxury Experience</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-10 left-1/2 -translate-x-1/2 z-[1100] glass px-8 py-5 hidden animate__animated">
+        <div class="flex items-center gap-4">
+            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-black">
+                <i class="fas fa-check text-sm"></i>
+            </div>
+            <span id="toast-msg" class="font-bold uppercase text-xs tracking-wider">Илова шуд!</span>
+        </div>
+    </div>
+
+    <!-- App Content -->
+    <div id="app-content" class="hidden">
+        
+        <!-- TOP HEADER (Global) -->
+        <header class="fixed top-0 left-0 right-0 z-[100] p-6 flex justify-between items-center bg-[#011613]/80 backdrop-blur-xl">
+            <div onclick="changeScreen('home')">
+                <h2 class="text-xl font-black italic leading-none">TURSUNZODA <br><span class="text-primary text-[10px] not-italic tracking-[0.3em] uppercase">Premium Shop</span></h2>
+            </div>
+            <div class="flex gap-3">
+                <div class="info-header-btn" onclick="changeScreen('developer')">
+                    <i class="fas fa-circle-info"></i>
+                </div>
+                <div class="w-11 h-11 glass flex items-center justify-center" onclick="toggleSearch(true)">
+                    <i class="fas fa-search text-sm"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search Overlay -->
+        <div id="search-overlay" class="fixed inset-0 z-[600] bg-[#011613] p-8 hidden">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="flex-1 glass px-6 py-4 flex items-center gap-4">
+                    <i class="fas fa-search text-primary"></i>
+                    <input type="text" id="search-input" placeholder="Номи молро нависед..." class="bg-transparent border-none outline-none w-full text-white font-bold">
+                </div>
+                <button onclick="toggleSearch(false)" class="text-sm font-black text-primary uppercase">Пӯшидан</button>
+            </div>
+            <div id="search-results" class="grid grid-cols-2 gap-5 overflow-y-auto max-h-[70vh] no-scrollbar">
+                <!-- Results -->
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="changeScreen('home', this)">
+                <i class="fas fa-house-chimney-window text-xl"></i>
+                <span class="text-[9px] font-bold uppercase tracking-tighter">Асосӣ</span>
+            </div>
+            <div class="nav-item" onclick="changeScreen('category', this)">
+                <i class="fas fa-grid-2 text-xl"></i>
+                <span class="text-[9px] font-bold uppercase tracking-tighter">Намуд</span>
+            </div>
+            <div class="relative -mt-12" onclick="changeScreen('cart', this)">
+                <div class="w-16 h-16 btn-gold rounded-full flex items-center justify-center border-[6px] border-[#011613]">
+                    <i class="fas fa-bag-shopping text-xl"></i>
+                </div>
+                <div id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-6 h-6 rounded-full flex items-center justify-center border-2 border-[#011613] font-black">0</div>
+            </div>
+            <div class="nav-item" onclick="changeScreen('favs', this)">
+                <i class="fas fa-heart-pulse text-xl"></i>
+                <span class="text-[9px] font-bold uppercase tracking-tighter">Дилхоҳ</span>
+            </div>
+            <div class="nav-item" onclick="changeScreen('store', this)">
+                <i class="fas fa-shop text-xl"></i>
+                <span class="text-[9px] font-bold uppercase tracking-tighter">Мағоза</span>
+            </div>
+        </nav>
+
+        <!-- SCREENS -->
+
+        <!-- 1. HOME SCREEN -->
+        <section id="home-screen" class="screen active pt-28">
+            <!-- Stories -->
+            <div class="px-6 mb-10">
+                <div class="flex gap-6 overflow-x-auto no-scrollbar">
+                    <div class="flex flex-col items-center gap-3 shrink-0" onclick="loadCategory('Обув')">
+                        <div class="w-16 h-16 rounded-full p-[2px] border-2 border-primary ring-4 ring-primary/10">
+                            <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86" class="w-full h-full rounded-full object-cover">
+                        </div>
+                        <span class="text-[9px] font-black uppercase tracking-widest opacity-60">Обув</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 shrink-0" onclick="loadCategory('Шим')">
+                        <div class="w-16 h-16 rounded-full p-[2px] border-2 border-gray-700">
+                            <img src="https://images.unsplash.com/photo-1624373434653-5290b2ed656d" class="w-full h-full rounded-full object-cover">
+                        </div>
+                        <span class="text-[9px] font-black uppercase tracking-widest opacity-60">Шим</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 shrink-0" onclick="loadCategory('Футболка')">
+                        <div class="w-16 h-16 rounded-full p-[2px] border-2 border-gray-700">
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab" class="w-full h-full rounded-full object-cover">
+                        </div>
+                        <span class="text-[9px] font-black uppercase tracking-widest opacity-60">Футболка</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 shrink-0" onclick="loadCategory('Аксессуар')">
+                        <div class="w-16 h-16 rounded-full p-[2px] border-2 border-gray-700">
+                            <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6" class="w-full h-full rounded-full object-cover">
+                        </div>
+                        <span class="text-[9px] font-black uppercase tracking-widest opacity-60">Соат</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Promo -->
+            <div class="px-6 mb-12">
+                <div class="w-full h-56 glass relative overflow-hidden flex flex-col justify-center p-8 border-primary/20">
+                    <div class="relative z-10">
+                        <div class="bg-red-600 text-[9px] font-black px-3 py-1 rounded-full w-max mb-4 uppercase tracking-widest">Аксияи Махсус</div>
+                        <h3 class="text-4xl font-black italic uppercase leading-none mb-3 tracking-tighter">Сифати <br><span class="text-primary">Олӣ & LUX</span></h3>
+                        <p class="text-xs font-bold text-white/50 uppercase tracking-widest">Танҳо моли Туркия ва Дубай</p>
+                    </div>
+                    <i class="fas fa-award absolute -right-4 -bottom-4 text-[150px] text-primary/5"></i>
+                </div>
+            </div>
+
+            <!-- Trending Section -->
+            <div class="px-6 mb-12">
+                <div class="flex justify-between items-center mb-6">
+                    <h4 class="text-sm font-black italic uppercase tracking-tighter">🔥 Беҳтарин фурӯш</h4>
+                    <span class="text-[10px] font-bold text-primary underline uppercase tracking-widest" onclick="changeScreen('category')">Ҳамааш</span>
+                </div>
+                <div id="trending-list" class="flex gap-5 overflow-x-auto no-scrollbar">
+                    <!-- Dynamic -->
+                </div>
+            </div>
+
+            <!-- Grid List -->
+            <div class="px-6">
+                <h4 id="main-grid-title" class="text-sm font-black italic uppercase tracking-tighter mb-8 border-l-4 border-primary pl-4">Ҳамаи маҳсулот</h4>
+                <div id="home-grid" class="grid grid-cols-2 gap-5">
+                    <!-- Dynamic -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. CATEGORY SCREEN -->
+        <section id="category-screen" class="screen p-8 pt-28">
+            <h2 class="text-4xl font-black italic uppercase mb-10 tracking-tighter">Намудҳо</h2>
+            <div class="grid grid-cols-1 gap-4" id="cat-render-list">
+                <!-- Categories -->
+            </div>
+        </section>
+
+        <!-- 3. CART SCREEN -->
+        <section id="cart-screen" class="screen p-6 pt-28">
+            <h2 class="text-4xl font-black italic uppercase text-center mb-10 tracking-tighter">Сабади харид</h2>
+            <div id="cart-items-container" class="space-y-4 mb-12">
+                <!-- Cart Items -->
+            </div>
+
+            <div id="cart-empty-msg" class="hidden flex flex-col items-center justify-center py-20 opacity-30 text-center">
+                <i class="fas fa-shopping-cart text-6xl mb-6"></i>
+                <p class="font-bold uppercase tracking-widest">Сабад холӣ аст</p>
+                <button onclick="changeScreen('home')" class="mt-6 text-primary font-black text-sm uppercase underline">Ба мағоза баргаштан</button>
+            </div>
+
+            <div id="cart-summary" class="glass p-8 sticky bottom-6 shadow-2xl border-primary/10">
+                <div class="flex justify-between mb-2 text-xs font-bold opacity-40 uppercase tracking-widest">
+                    <span>Миқдори бор:</span>
+                    <span id="sub-total">0 TJS</span>
+                </div>
+                <div class="flex justify-between mb-8 text-2xl font-black italic tracking-tighter">
+                    <span>Ҳамагӣ:</span>
+                    <span id="grand-total" class="text-primary">0 TJS</span>
+                </div>
+                <button onclick="processWhatsAppOrder()" class="btn-gold w-full py-5 rounded-2xl flex items-center justify-center gap-4 uppercase font-black tracking-widest text-sm">
+                    <i class="fab fa-whatsapp text-2xl"></i> Фармоиш додан
+                </button>
+            </div>
+        </section>
+
+        <!-- 4. FAVORITES SCREEN -->
+        <section id="favs-screen" class="screen p-8 pt-28">
+            <h2 class="text-4xl font-black italic uppercase text-center mb-10 tracking-tighter">Дилхоҳ</h2>
+            <div id="favs-grid" class="grid grid-cols-2 gap-5">
+                <!-- Dynamic Favs -->
+            </div>
+        </section>
+
+        <!-- 5. STORE INFO SCREEN (Replacement for Profile) -->
+        <section id="store-screen" class="screen p-8 pt-28">
+            <div class="flex flex-col items-center text-center mb-12">
+                <div class="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center mb-6 border border-primary/20 shadow-xl">
+                    <i class="fas fa-shop text-4xl text-primary"></i>
+                </div>
+                <h2 class="text-3xl font-black italic uppercase tracking-tighter">Tursunzoda Shop</h2>
+                <div class="bg-primary text-black text-[9px] font-black px-3 py-1 rounded-full mt-2 uppercase tracking-widest">Store №1 in City</div>
+            </div>
+
+            <div class="glass p-8 mb-6 border-primary/10">
+                <h4 class="font-black italic text-primary uppercase mb-4 tracking-widest text-xs">Дар бораи мағоза</h4>
+                <p class="text-sm leading-relaxed text-white/70 font-medium">
+                    Мағозаи "TURSUNZODA SHOP" беҳтарин ва калонтарин мағозаи либосҳои мардона дар шаҳри Турсунзода мебошад. Мо танҳо моли босифати Premium-ро аз Туркия, Дубай ва Ветнам пешниҳод мекунем. 
+                    <br><br>
+                    Сифати олӣ, нархи дастрас ва хизматрасонии касбӣ кафолати мост!
+                </p>
+            </div>
+
+            <div class="glass p-8 mb-8 border-primary/10">
+                <h4 class="font-black italic text-primary uppercase mb-6 tracking-widest text-xs">Тамос ва Суроға</h4>
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-location-dot text-primary mt-1"></i>
+                        <div>
+                            <p class="text-xs font-black uppercase mb-1">Суроғаи мо:</p>
+                            <p class="text-sm text-white/60">ш. Турсунзода, Маркази савдо (Бозори марказӣ)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-phone text-primary"></i>
+                        <div>
+                            <p class="text-xs font-black uppercase mb-1">Телефон:</p>
+                            <p class="text-sm text-white/60">+992 200 70 20 32</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="openMap()" class="btn-gold w-full py-4 rounded-xl mt-8 flex items-center justify-center gap-3 text-xs uppercase font-black">
+                    <i class="fas fa-map-location-dot"></i> Суроға дар харита
+                </button>
+            </div>
+        </section>
+
+        <!-- 6. DEVELOPER / INFO SCREEN -->
+        <section id="developer-screen" class="screen p-8 pt-28">
+            <div class="flex flex-col items-center text-center mb-12">
+                <div class="w-20 h-20 bg-blue-600/10 rounded-full flex items-center justify-center mb-6 border border-blue-600/30">
+                    <i class="fas fa-code text-3xl text-blue-500"></i>
+                </div>
+                <div class="dev-badge mb-3 uppercase">TajWeb IT Studio</div>
+                <h2 class="text-2xl font-black italic uppercase tracking-tighter">Маълумоти техникӣ</h2>
+            </div>
+
+            <div class="glass p-8 mb-6 border-blue-500/20 bg-blue-500/5">
+                <p class="text-xs leading-relaxed font-bold text-white/80">
+                    Вебсайт тавассути <span class="text-blue-400">TAJWEB IT STUDIO</span> сохта шудааст. 
+                    <br><br>
+                    <span class="text-red-500 font-black uppercase">ОГОҲИНОМА:</span> <br>
+                    Барномасоз аз борҳои дохили вебсайт ва шартномаи мизоҷ бо соҳиби мағоза ҷавобгарӣ намегирад. Ҳамаи амалиётҳои хариду фурӯш мустақиман байни мизоҷ ва соҳиби мағоза сурат мегиранд.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <h4 class="text-[10px] font-black uppercase text-white/30 ml-2 tracking-widest">Барои ҳамкорӣ:</h4>
+                <a href="https://wa.me/992200702032" class="glass p-5 flex items-center justify-between border-blue-500/10 active:scale-95 transition-all">
+                    <div class="flex items-center gap-4">
+                        <i class="fab fa-whatsapp text-green-500 text-xl"></i>
+                        <span class="text-sm font-bold">+992 200 70 20 32</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-[10px] opacity-20"></i>
+                </a>
+                <a href="https://t.me/TAJWEB_IT" class="glass p-5 flex items-center justify-between border-blue-500/10 active:scale-95 transition-all">
+                    <div class="flex items-center gap-4">
+                        <i class="fab fa-telegram text-blue-400 text-xl"></i>
+                        <span class="text-sm font-bold">@TAJWEB_IT</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-[10px] opacity-20"></i>
+                </a>
+            </div>
+
+            <button onclick="changeScreen('home')" class="w-full py-5 text-sm font-black text-white/20 uppercase tracking-[0.3em] mt-10">
+                <i class="fas fa-arrow-left mr-3"></i> Баргаштан
+            </button>
+        </section>
+
+        <!-- 7. PRODUCT DETAIL SCREEN -->
+        <section id="detail-screen" class="screen">
+            <div id="detail-render"></div>
+        </section>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. DATA CENTER
+        const products = [
+            { id: 1, name: 'Jordan 4 Retro Black', price: 1450, oldPrice: 1800, cat: 'Обув', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff', trend: true, desc: 'Кроссовкаҳои Nike Jordan 4 Retro бо сифати Premium. Маводи чарми табиӣ ва дизайни классикӣ.' },
+            { id: 2, name: 'Adidas Forum Low', price: 920, oldPrice: 1150, cat: 'Обув', img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a', trend: true, desc: 'Adidas Forum Low - интихоби беҳтарин барои ҳаррӯза. Хеле қулай ва босифат.' },
+            { id: 3, name: 'Slim Fit Denim Dark', price: 480, oldPrice: 650, cat: 'Шим', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246', trend: false, desc: 'Шими ҷинсии босифати Туркия. Ранги сиёҳи торик, ки бо ҳама либос мезебад.' },
+            { id: 4, name: 'Classic Suit Dark Blue', price: 2100, oldPrice: 2800, cat: 'Костюм', img: 'https://images.unsplash.com/photo-1594932224011-9c003ce0b247', trend: true, desc: 'Костюми классикии мардона. Маводи аълосифат, ки چروک намешавад.' },
+            { id: 5, name: 'Cargo Urban Green', price: 550, oldPrice: 750, cat: 'Шим', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1', trend: true, desc: 'Шими Карго бо ҷайбҳои паҳлӯӣ. Услуби Streetwear.' },
+            { id: 6, name: 'Rolex Gold Master', price: 1850, oldPrice: 2400, cat: 'Аксессуар', img: 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6', trend: false, desc: 'Соати дастӣ бо ранги тиллоӣ. Кафолати коршоямӣ 1 сол.' },
+            { id: 7, name: 'Oversize White Tee', price: 280, oldPrice: 400, cat: 'Футболка', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab', trend: false, desc: 'Футболкаи пахтагин бо сифати Туркия. Хеле нарм ва босаловат.' },
+            { id: 8, name: 'Puma RS-X Tech', price: 1100, oldPrice: 1350, cat: 'Обув', img: 'https://images.unsplash.com/photo-1584735175315-9d5df23860e6', trend: true, desc: 'Кроссовкаҳои Puma бо технологияи RS. Барои варзиш ва сайру гашт.' }
+        ];
+
+        const categories = ['Ҳамааш', 'Обув', 'Костюм', 'Шим', 'Футболка', 'Аксессуар'];
+
+        let cart = [];
+        let favorites = JSON.parse(localStorage.getItem('tshop_favs')) || [];
+
+        // 2. INIT
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash');
+                splash.classList.add('animate__animated', 'animate__fadeOut');
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    document.getElementById('app-content').classList.remove('hidden');
+                    renderApp();
+                }, 600);
+            }, 2500);
+        });
+
+        function renderApp() {
+            renderGrid(products);
+            renderTrending();
+            renderCategoryList();
+            updateCartBadge();
+            
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = products.filter(p => p.name.toLowerCase().includes(query) || p.cat.toLowerCase().includes(query));
+                renderSearchResults(filtered);
+            });
+        }
+
+        // 3. CORE LOGIC
+        function changeScreen(id, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`${id}-screen`).classList.add('active');
+            
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            }
+            
+            if(id === 'cart') renderCart();
+            if(id === 'favs') renderFavs();
+            
+            window.scrollTo(0,0);
+        }
+
+        function toggleSearch(show) {
+            const overlay = document.getElementById('search-overlay');
+            overlay.style.display = show ? 'block' : 'none';
+            if(show) document.getElementById('search-input').focus();
+        }
+
+        // 4. RENDERING
+        function renderGrid(data) {
+            const grid = document.getElementById('home-grid');
+            grid.innerHTML = data.map(p => `
+                <div class="p-card glass p-2 animate__animated animate__fadeInUp">
+                    <div class="relative overflow-hidden rounded-2xl mb-4" onclick="openProduct(${p.id})">
+                        <img src="${p.img}" class="w-full h-44 object-cover">
+                        <div class="badge-new">NEW</div>
+                        <button class="absolute top-3 right-3 w-9 h-9 glass flex items-center justify-center rounded-full z-20" onclick="event.stopPropagation(); toggleFav(${p.id})">
+                            <i class="${favorites.includes(p.id) ? 'fas text-red-500' : 'far'} fa-heart text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <p class="text-[8px] font-black text-primary uppercase mb-1 tracking-widest">${p.cat}</p>
+                        <h5 class="text-[11px] font-bold uppercase truncate italic mb-3 tracking-tighter">${p.name}</h5>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-black italic">${p.price} TJS</span>
+                            <button class="w-8 h-8 btn-gold rounded-lg flex items-center justify-center" onclick="addToCart(${p.id})">
+                                <i class="fas fa-plus text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTrending() {
+            const list = document.getElementById('trending-list');
+            const trending = products.filter(p => p.trend);
+            list.innerHTML = trending.map(p => `
+                <div class="glass flex-shrink-0 w-64 p-3 relative" onclick="openProduct(${p.id})">
+                    <img src="${p.img}" class="w-full h-36 object-cover rounded-xl mb-4">
+                    <h5 class="font-black italic text-xs uppercase truncate">${p.name}</h5>
+                    <div class="flex items-center gap-3 mt-1">
+                        <span class="text-primary font-black text-sm">${p.price} TJS</span>
+                        <span class="text-[9px] opacity-30 line-through font-bold">${p.oldPrice} TJS</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCategoryList() {
+            const container = document.getElementById('cat-render-list');
+            container.innerHTML = categories.map(c => `
+                <div class="glass p-6 flex items-center justify-between active:scale-95 transition-all" onclick="loadCategory('${c}')">
+                    <div class="flex items-center gap-5">
+                        <div class="w-12 h-12 glass flex items-center justify-center rounded-2xl">
+                            <i class="fas ${getIcon(c)} text-primary text-xl"></i>
+                        </div>
+                        <span class="font-black italic uppercase tracking-tighter">${c}</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-primary opacity-30 text-xs"></i>
+                </div>
+            `).join('');
+        }
+
+        function getIcon(c) {
+            const icons = { 'Ҳамааш': 'fa-grid-large', 'Обув': 'fa-socks', 'Костюм': 'fa-user-tie', 'Шим': 'fa-venn-diagram', 'Футболка': 'fa-shirt', 'Аксессуар': 'fa-clock' };
+            return icons[c] || 'fa-tag';
+        }
+
+        function loadCategory(c) {
+            const filtered = c === 'Ҳамааш' ? products : products.filter(p => p.cat === c);
+            renderGrid(filtered);
+            changeScreen('home');
+            document.getElementById('main-grid-title').innerText = "КАТЕГОРИЯ: " + c;
+            window.scrollTo(0, 400);
+        }
+
+        // 5. CART & ORDERS
+        function addToCart(id) {
+            const p = products.find(x => x.id === id);
+            const exists = cart.find(x => x.id === id);
+            if(exists) exists.qty++; else cart.push({ ...p, qty: 1 });
+            updateCartBadge();
+            showToast(`${p.name} ба сабад илова шуд!`);
+        }
+
+        function updateCartBadge() {
+            const count = cart.reduce((s, i) => s + i.qty, 0);
+            document.getElementById('cart-count').innerText = count;
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const empty = document.getElementById('cart-empty-msg');
+            const summary = document.getElementById('cart-summary');
+            
+            if(cart.length === 0) {
+                container.innerHTML = '';
+                empty.classList.remove('hidden');
+                summary.classList.add('hidden');
+                return;
+            }
+            
+            empty.classList.add('hidden');
+            summary.classList.remove('hidden');
+            
+            let total = 0;
+            container.innerHTML = cart.map((item, idx) => {
+                total += (item.price * item.qty);
+                return `
+                    <div class="glass p-5 flex gap-5 items-center animate__animated animate__fadeIn">
+                        <img src="${item.img}" class="w-20 h-20 object-cover rounded-xl shadow-lg">
+                        <div class="flex-1">
+                            <h5 class="text-[10px] font-black uppercase italic truncate w-36">${item.name}</h5>
+                            <p class="text-primary font-black text-sm mb-3">${item.price} TJS</p>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-3 glass px-2 py-1 rounded-lg">
+                                    <button onclick="updateQty(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center bg-white/5 rounded">-</button>
+                                    <span class="text-xs font-black">${item.qty}</span>
+                                    <button onclick="updateQty(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center bg-white/5 rounded">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="removeItem(${idx})" class="text-red-500 opacity-20 hover:opacity-100 p-2"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('sub-total').innerText = total + " TJS";
+            document.getElementById('grand-total').innerText = total + " TJS";
+        }
+
+        function updateQty(id, d) {
+            const item = cart.find(x => x.id === id);
+            if(item) {
+                item.qty += d;
+                if(item.qty < 1) item.qty = 1;
+                renderCart();
+                updateCartBadge();
+            }
+        }
+
+        function removeItem(idx) {
+            cart.splice(idx, 1);
+            renderCart();
+            updateCartBadge();
+        }
+
+        function processWhatsAppOrder() {
+            if(cart.length === 0) return;
+            let msg = "Салом, Tursunzoda Shop! Ман мехоҳам фармоиш диҳам:%0A%0A";
+            let total = 0;
+            cart.forEach((i, idx) => {
+                msg += `${idx+1}. *${i.name}* (${i.qty} шт) - ${i.price * i.qty}TJS%0A`;
+                total += (i.price * i.qty);
+            });
+            msg += `%0A*ҲАМАГӢ:* ${total} TJS%0A%0A_Интизори ҷавоб ҳастам!_`;
+            window.open(`https://wa.me/992200702032?text=${msg}`, '_blank');
+        }
+
+        // 6. FAVS & DETAILS
+        function toggleFav(id) {
+            if(favorites.includes(id)) favorites = favorites.filter(x => x !== id);
+            else favorites.push(id);
+            localStorage.setItem('tshop_favs', JSON.stringify(favorites));
+            renderApp();
+            showToast("Рӯйхат нав шуд");
+        }
+
+        function renderFavs() {
+            const grid = document.getElementById('favs-grid');
+            const items = products.filter(p => favorites.includes(p.id));
+            if(items.length === 0) {
+                grid.innerHTML = `<div class="col-span-2 py-20 text-center opacity-20 font-black uppercase">Рӯйхат холӣ аст</div>`;
+                return;
+            }
+            grid.innerHTML = items.map(p => `
+                <div class="glass p-2">
+                    <img src="${p.img}" class="w-full h-40 object-cover rounded-xl mb-3" onclick="openProduct(${p.id})">
+                    <div class="px-2">
+                        <h5 class="text-[10px] font-black uppercase italic truncate">${p.name}</h5>
+                        <div class="flex justify-between items-center mt-1">
+                            <span class="text-primary font-black text-xs">${p.price} TJS</span>
+                            <i class="fas fa-heart text-red-500" onclick="toggleFav(${p.id})"></i>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProduct(id) {
+            const p = products.find(x => x.id === id);
+            const detail = document.getElementById('detail-render');
+            detail.innerHTML = `
+                <div class="relative h-[480px]">
+                    <img src="${p.img}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#011613] via-transparent to-transparent"></div>
+                    <div class="absolute top-8 left-6 w-12 h-12 glass flex items-center justify-center rounded-full" onclick="changeScreen('home')"><i class="fas fa-arrow-left"></i></div>
+                </div>
+                <div class="p-8 -mt-24 relative z-10">
+                    <div class="glass p-8 border-primary/20 shadow-2xl">
+                        <span class="text-[9px] font-black text-primary uppercase tracking-[0.3em] mb-3 block">${p.cat}</span>
+                        <h1 class="text-4xl font-black italic uppercase leading-tight mb-4 tracking-tighter">${p.name}</h1>
+                        <div class="flex items-end gap-4 mb-8">
+                            <span class="text-4xl font-black text-primary italic">${p.price} TJS</span>
+                            <span class="text-sm opacity-30 line-through font-bold mb-1">${p.oldPrice} TJS</span>
+                        </div>
+                        <p class="text-sm leading-relaxed text-white/60 mb-10 font-medium">${p.desc}</p>
+                        <div class="flex gap-4">
+                            <button onclick="addToCart(${p.id})" class="btn-gold flex-1 py-5 rounded-2xl font-black uppercase tracking-widest text-xs">Ба сабад илова кардан</button>
+                            <button onclick="shareProduct('${p.name}')" class="w-16 h-16 glass flex items-center justify-center text-xl"><i class="fas fa-share-nodes"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            changeScreen('detail');
+        }
+
+        // 7. UTILS
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = m;
+            t.classList.remove('hidden', 'animate__fadeOutUp');
+            t.classList.add('animate__fadeInDown');
+            setTimeout(() => {
+                t.classList.add('animate__fadeOutUp');
+                setTimeout(() => t.classList.add('hidden'), 500);
+            }, 2000);
+        }
+
+        function openMap() {
+            window.open('https://www.google.com/maps/search/Турсунзода+бозори+маркази', '_blank');
+        }
+
+        function shareProduct(n) {
+            if(navigator.share) navigator.share({ title: n, url: window.location.href });
+            else showToast("Нусхабардорӣ шуд!");
+        }
+
+        function renderSearchResults(data) {
+            const container = document.getElementById('search-results');
+            if(data.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-10 opacity-20 uppercase font-black">Ёфт нашуд</div>`;
+                return;
+            }
+            container.innerHTML = data.map(p => `
+                <div class="glass p-2" onclick="openProduct(${p.id}); toggleSearch(false)">
+                    <img src="${p.img}" class="w-full h-32 object-cover rounded-xl mb-2">
+                    <h6 class="text-[9px] font-black uppercase truncate italic px-1">${p.name}</h6>
+                    <p class="text-primary font-black text-[10px] px-1">${p.price} TJS</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
