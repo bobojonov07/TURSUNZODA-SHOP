@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TURSUNZODA SHOP | OFFICIAL V6.0</title>
+
+    <!-- External Assets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #d4af37;
+            --bg-dark: #011613;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Glassmorphism --- */
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+            color: #000;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-gold:active { transform: scale(0.93); }
+
+        /* --- Screens --- */
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 120px;
+            width: 100%;
+        }
+
+        .screen.active {
+            display: block;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Nav Bar --- */
+        .bottom-nav {
+            background: rgba(1, 22, 19, 0.95);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            z-index: 500;
+            padding: 15px 24px 35px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 35px 35px 0 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: rgba(255,255,255,0.3);
+            transition: 0.3s;
+        }
+
+        .nav-item.active { color: var(--primary); }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* --- LOGO IMAGE STYLE --- */
+        .header-logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid var(--primary);
+            padding: 2px;
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .info-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            color: var(--primary);
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen -->
+    <div id="splash" class="fixed inset-0 z-[1000] bg-[#011613] flex flex-col items-center justify-center">
+        <div class="w-20 h-20 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-6"></div>
+        <h1 class="text-3xl font-black italic">TURSUNZODA <span class="text-primary">SHOP</span></h1>
+    </div>
+
+    <!-- App Content -->
+    <div id="app-content" class="hidden">
+        
+        <!-- HEADER WITH LOGO IMAGE -->
+        <header class="fixed top-0 left-0 right-0 z-[100] p-5 flex justify-between items-center bg-[#011613]/90 backdrop-blur-xl border-b border-white/5">
+            <div class="flex items-center gap-4" onclick="changeScreen('home')">
+                <!-- ССЫЛКАИ СУРАТИ ХУДРО ДАР ИН ҶО МОН (GITHUB URL) -->
+                <img src="icon.png" 
+                     onerror="this.src='https://cdn-icons-png.flaticon.com/512/3659/3659899.png'" 
+                     class="header-logo" alt="Logo">
+                <div>
+                    <h2 class="text-lg font-black italic leading-none">TURSUNZODA</h2>
+                    <p class="text-[8px] font-bold text-primary uppercase tracking-widest">Premium Store</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div class="info-btn" onclick="changeScreen('dev')">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="w-10 h-10 glass flex items-center justify-center" onclick="toggleSearch(true)">
+                    <i class="fas fa-search text-sm"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search Bar Overlay -->
+        <div id="search-overlay" class="fixed inset-0 z-[600] bg-[#011613] p-8 hidden">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="flex-1 glass px-6 py-4 flex items-center gap-4">
+                    <i class="fas fa-search text-primary"></i>
+                    <input type="text" id="search-input" placeholder="Ҷустуҷӯ..." class="bg-transparent border-none outline-none w-full font-bold">
+                </div>
+                <button onclick="toggleSearch(false)" class="text-sm font-black text-primary uppercase">X</button>
+            </div>
+            <div id="search-results" class="grid grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="changeScreen('home', this)">
+                <i class="fas fa-house-chimney text-xl"></i>
+                <span class="text-[9px] font-bold uppercase">Асосӣ</span>
+            </div>
+            <div class="nav-item" onclick="changeScreen('category', this)">
+                <i class="fas fa-grid-2 text-xl"></i>
+                <span class="text-[9px] font-bold uppercase">Намуд</span>
+            </div>
+            <div class="relative -mt-12" onclick="changeScreen('cart', this)">
+                <div class="w-16 h-16 btn-gold rounded-full flex items-center justify-center border-[6px] border-[#011613]">
+                    <i class="fas fa-shopping-bag text-xl"></i>
+                </div>
+                <div id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-6 h-6 rounded-full flex items-center justify-center border-2 border-[#011613] font-black">0</div>
+            </div>
+            <div class="nav-item" onclick="changeScreen('favs', this)">
+                <i class="fas fa-heart text-xl"></i>
+                <span class="text-[9px] font-bold uppercase">Дилхоҳ</span>
+            </div>
+            <div class="nav-item" onclick="changeScreen('store', this)">
+                <i class="fas fa-shop text-xl"></i>
+                <span class="text-[9px] font-bold uppercase">Мағоза</span>
+            </div>
+        </nav>
+
+        <!-- 1. HOME SCREEN -->
+        <section id="home-screen" class="screen active pt-24 px-6">
+            <!-- Welcome Banner Image -->
+            <div class="mb-10 mt-4 rounded-[30px] overflow-hidden relative h-44 shadow-2xl">
+                <!-- ИНҶО ҲАМ СУРАТИ БОЛОИРО МОНДА МЕТАВОНӢ -->
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/40 flex flex-col justify-center p-8">
+                    <h3 class="text-3xl font-black italic uppercase tracking-tighter">Бори Нав <br><span class="text-primary">Омад!</span></h3>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.3em] mt-2 opacity-80">Collection 2024</p>
+                </div>
+            </div>
+
+            <!-- Categories Horizontal -->
+            <div class="flex gap-5 overflow-x-auto no-scrollbar mb-10">
+                <div class="flex flex-col items-center gap-2" onclick="loadCategory('Обув')">
+                    <div class="w-16 h-16 rounded-full border-2 border-primary p-1"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" class="w-full h-full rounded-full object-cover"></div>
+                    <span class="text-[9px] font-bold uppercase opacity-50">Обув</span>
+                </div>
+                <div class="flex flex-col items-center gap-2" onclick="loadCategory('Шим')">
+                    <div class="w-16 h-16 rounded-full border-2 border-gray-700 p-1"><img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246" class="w-full h-full rounded-full object-cover"></div>
+                    <span class="text-[9px] font-bold uppercase opacity-50">Шим</span>
+                </div>
+                <div class="flex flex-col items-center gap-2" onclick="loadCategory('Костюм')">
+                    <div class="w-16 h-16 rounded-full border-2 border-gray-700 p-1"><img src="https://images.unsplash.com/photo-1594932224011-9c003ce0b247" class="w-full h-full rounded-full object-cover"></div>
+                    <span class="text-[9px] font-bold uppercase opacity-50">Костюм</span>
+                </div>
+            </div>
+
+            <h4 id="grid-title" class="text-sm font-black italic uppercase mb-8 border-l-4 border-primary pl-4">Ҳамаи маҳсулот</h4>
+            <div id="main-grid" class="grid grid-cols-2 gap-5">
+                <!-- Products -->
+            </div>
+        </section>
+
+        <!-- 2. CATEGORY SCREEN -->
+        <section id="category-screen" class="screen pt-24 px-8">
+            <h2 class="text-4xl font-black italic uppercase mb-10 tracking-tighter">Намудҳо</h2>
+            <div id="cat-list" class="space-y-4"></div>
+        </section>
+
+        <!-- 3. CART SCREEN -->
+        <section id="cart-screen" class="screen pt-24 px-6">
+            <h2 class="text-4xl font-black italic uppercase text-center mb-10">Сабад</h2>
+            <div id="cart-items" class="space-y-4 mb-10"></div>
+            <div id="cart-footer" class="glass p-8 sticky bottom-4 border-primary/10 shadow-2xl">
+                <div class="flex justify-between mb-8 text-2xl font-black italic">
+                    <span>Ҳамагӣ:</span>
+                    <span id="total-price" class="text-primary">0 TJS</span>
+                </div>
+                <button onclick="checkout()" class="btn-gold w-full py-5 rounded-2xl flex items-center justify-center gap-4 uppercase font-black text-sm">
+                    <i class="fab fa-whatsapp text-2xl"></i> Фармоиш додан
+                </button>
+            </div>
+        </section>
+
+        <!-- 4. STORE SCREEN -->
+        <section id="store-screen" class="screen pt-24 px-8">
+            <div class="flex flex-col items-center text-center mb-10">
+                <div class="w-20 h-20 glass flex items-center justify-center mb-6 text-primary text-4xl">
+                    <i class="fas fa-shop"></i>
+                </div>
+                <h2 class="text-3xl font-black italic uppercase">Tursunzoda Shop</h2>
+                <div class="bg-primary text-black text-[9px] font-black px-3 py-1 rounded-full mt-2 uppercase">Store №1</div>
+            </div>
+            <div class="glass p-8 mb-6">
+                <h4 class="text-xs font-black text-primary uppercase mb-4 italic">Дар бораи мағоза</h4>
+                <p class="text-sm leading-relaxed opacity-70">
+                    Мо беҳтарин либосҳои мардонаро аз Туркия ва Дубай пешниҳод мекунем. Сифати Premium ва нархи дастрас кафолати мост.
+                </p>
+            </div>
+            <div class="glass p-8 mb-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <i class="fas fa-location-dot text-primary"></i>
+                    <span class="text-xs font-bold uppercase">ш. Турсунзода, Маркази савдо</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <i class="fas fa-phone text-primary"></i>
+                    <span class="text-xs font-bold uppercase">+992 200 70 20 32</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. DEVELOPER SCREEN (TajWeb IT Studio) -->
+        <section id="dev-screen" class="screen pt-24 px-8">
+            <div class="flex flex-col items-center text-center mb-12">
+                <div class="w-20 h-20 bg-blue-600/10 rounded-full flex items-center justify-center mb-6 border border-blue-500/20">
+                    <i class="fas fa-code text-3xl text-blue-500"></i>
+                </div>
+                <h2 class="text-2xl font-black italic uppercase">TajWeb IT Studio</h2>
+            </div>
+            <div class="glass p-8 mb-8 border-blue-500/20 bg-blue-500/5">
+                <p class="text-xs leading-relaxed font-bold text-white/70">
+                    Вебсайт тавассути <span class="text-blue-400">TAJWEB IT STUDIO</span> сохта шудааст. 
+                    <br><br>
+                    <span class="text-red-500 font-black uppercase tracking-widest">ОГОҲИНОМА:</span> <br>
+                    Барномасоз аз борҳои дохили вебсайт ва шартномаи мизоҷ бо соҳиби мағоза ҷавобгарӣ намегирад. Барои ҳамкорӣ:
+                </p>
+            </div>
+            <div class="space-y-4">
+                <a href="https://wa.me/992200702032" class="glass p-5 flex items-center justify-between">
+                    <span class="text-sm font-bold tracking-widest">+992 200 70 20 32</span>
+                    <i class="fab fa-whatsapp text-green-500"></i>
+                </a>
+                <a href="https://t.me/TAJWEB_IT" class="glass p-5 flex items-center justify-between">
+                    <span class="text-sm font-bold tracking-widest">@TAJWEB_IT</span>
+                    <i class="fab fa-telegram text-blue-400"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- 6. DETAIL SCREEN -->
+        <section id="detail-screen" class="screen">
+            <div id="detail-render"></div>
+        </section>
+
+        <!-- FAVS SCREEN -->
+        <section id="favs-screen" class="screen pt-24 px-8">
+            <h2 class="text-4xl font-black italic uppercase text-center mb-10">Дилхоҳ</h2>
+            <div id="favs-grid" class="grid grid-cols-2 gap-5"></div>
+        </section>
+
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: 'Jordan 4 Retro', price: 1450, oldPrice: 1800, cat: 'Обув', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff', desc: 'Сифати Premium аз Nike.' },
+            { id: 2, name: 'Adidas Forum Low', price: 920, oldPrice: 1100, cat: 'Обув', img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a', desc: 'Кроссовкаи классикӣ.' },
+            { id: 3, name: 'Slim Fit Denim', price: 480, oldPrice: 650, cat: 'Шим', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246', desc: 'Шими ҷинсии Туркия.' },
+            { id: 4, name: 'Classic Suit', price: 2100, oldPrice: 2800, cat: 'Костюм', img: 'https://images.unsplash.com/photo-1594932224011-9c003ce0b247', desc: 'Костюми босаловат.' },
+            { id: 5, name: 'Oversize Tee', price: 280, oldPrice: 400, cat: 'Футболка', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab', desc: 'Футболкаи пахтагин.' }
+        ];
+
+        let cart = [];
+        let favorites = JSON.parse(localStorage.getItem('tshop_favs')) || [];
+
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('app-content').classList.remove('hidden');
+                renderApp();
+            }, 2000);
+        };
+
+        function renderApp() {
+            renderGrid(products);
+            renderCatList();
+            updateCartBadge();
+            
+            document.getElementById('search-input').oninput = (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+                renderSearchResults(filtered);
+            };
+        }
+
+        function changeScreen(id, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`${id}-screen`).classList.add('active');
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            }
+            if(id === 'cart') renderCart();
+            if(id === 'favs') renderFavs();
+            window.scrollTo(0,0);
+        }
+
+        function toggleSearch(show) {
+            document.getElementById('search-overlay').style.display = show ? 'block' : 'none';
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('main-grid');
+            grid.innerHTML = data.map(p => `
+                <div class="glass p-2 animate__animated animate__fadeInUp">
+                    <div class="relative rounded-2xl overflow-hidden mb-3" onclick="openProduct(${p.id})">
+                        <img src="${p.img}" class="w-full h-40 object-cover">
+                        <button class="absolute top-2 right-2 w-8 h-8 glass rounded-full" onclick="event.stopPropagation(); toggleFav(${p.id})">
+                            <i class="${favorites.includes(p.id) ? 'fas text-red-500' : 'far'} fa-heart text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <h5 class="text-[10px] font-black uppercase truncate italic">${p.name}</h5>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-primary font-black text-sm">${p.price} TJS</span>
+                            <button onclick="addToCart(${p.id})" class="w-7 h-7 btn-gold rounded-lg flex items-center justify-center">
+                                <i class="fas fa-plus text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCatList() {
+            const cats = ['Ҳамааш', 'Обув', 'Костюм', 'Шим', 'Футболка'];
+            document.getElementById('cat-list').innerHTML = cats.map(c => `
+                <div class="glass p-6 flex justify-between items-center" onclick="loadCategory('${c}')">
+                    <span class="font-black italic uppercase">${c}</span>
+                    <i class="fas fa-chevron-right text-primary opacity-30"></i>
+                </div>
+            `).join('');
+        }
+
+        function loadCategory(c) {
+            const filtered = c === 'Ҳамааш' ? products : products.filter(p => p.cat === c);
+            renderGrid(filtered);
+            changeScreen('home');
+            document.getElementById('grid-title').innerText = "КАТЕГОРИЯ: " + c;
+        }
+
+        function addToCart(id) {
+            const p = products.find(x => x.id === id);
+            cart.push(p);
+            updateCartBadge();
+            alert("Ба сабад илова шуд!");
+        }
+
+        function updateCartBadge() {
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-items');
+            let total = 0;
+            if(cart.length === 0) {
+                list.innerHTML = `<p class="text-center py-20 opacity-30">САБАД ХОЛӢ АСТ</p>`;
+                document.getElementById('total-price').innerText = "0 TJS";
+                return;
+            }
+            list.innerHTML = cart.map((item, idx) => {
+                total += item.price;
+                return `
+                    <div class="glass p-4 flex gap-4 items-center">
+                        <img src="${item.img}" class="w-16 h-16 object-cover rounded-xl">
+                        <div class="flex-1">
+                            <h5 class="text-xs font-black uppercase italic">${item.name}</h5>
+                            <p class="text-primary font-black">${item.price} TJS</p>
+                        </div>
+                        <i class="fas fa-trash text-red-500 opacity-30" onclick="removeItem(${idx})"></i>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('total-price').innerText = total + " TJS";
+        }
+
+        function removeItem(idx) {
+            cart.splice(idx, 1);
+            renderCart();
+            updateCartBadge();
+        }
+
+        function openProduct(id) {
+            const p = products.find(x => x.id === id);
+            document.getElementById('detail-render').innerHTML = `
+                <div class="relative h-[450px]">
+                    <img src="${p.img}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#011613] via-transparent to-transparent"></div>
+                    <div class="absolute top-8 left-6 w-12 h-12 glass flex items-center justify-center rounded-full" onclick="changeScreen('home')"><i class="fas fa-arrow-left"></i></div>
+                </div>
+                <div class="p-8 -mt-24 relative z-10">
+                    <div class="glass p-8 border-primary/20">
+                        <h1 class="text-3xl font-black italic uppercase mb-4">${p.name}</h1>
+                        <p class="text-3xl font-black text-primary mb-6">${p.price} TJS</p>
+                        <p class="text-sm opacity-60 mb-8">${p.desc}</p>
+                        <button onclick="addToCart(${p.id})" class="btn-gold w-full py-5 rounded-2xl uppercase font-black">Илова ба сабад</button>
+                    </div>
+                </div>
+            `;
+            changeScreen('detail');
+        }
+
+        function toggleFav(id) {
+            if(favorites.includes(id)) favorites = favorites.filter(x => x !== id);
+            else favorites.push(id);
+            localStorage.setItem('tshop_favs', JSON.stringify(favorites));
+            renderApp();
+        }
+
+        function renderFavs() {
+            const grid = document.getElementById('favs-grid');
+            const items = products.filter(p => favorites.includes(p.id));
+            if(items.length === 0) {
+                grid.innerHTML = `<div class="col-span-2 py-20 text-center opacity-20">РӮЙХАТ ХОЛӢ АСТ</div>`;
+                return;
+            }
+            grid.innerHTML = items.map(p => `
+                <div class="glass p-2">
+                    <img src="${p.img}" class="w-full h-40 object-cover rounded-xl mb-3" onclick="openProduct(${p.id})">
+                    <h5 class="text-[10px] font-black uppercase italic truncate">${p.name}</h5>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-primary font-black text-xs">${p.price} TJS</span>
+                        <i class="fas fa-heart text-red-500" onclick="toggleFav(${p.id})"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkout() {
+            if(cart.length === 0) return;
+            let msg = "Салом! Фармоиш аз мағоза:%0A";
+            cart.forEach((i, idx) => msg += `${idx+1}. ${i.name} - ${i.price}TJS%0A`);
+            window.open(`https://wa.me/992200702032?text=${msg}`, '_blank');
+        }
+
+        function renderSearchResults(data) {
+            const res = document.getElementById('search-results');
+            if(data.length === 0) {
+                res.innerHTML = `<div class="col-span-2 text-center py-10 opacity-20">ЁФТ НАШУД</div>`;
+                return;
+            }
+            res.innerHTML = data.map(p => `
+                <div class="glass p-2" onclick="openProduct(${p.id}); toggleSearch(false)">
+                    <img src="${p.img}" class="w-full h-32 object-cover rounded-xl mb-2">
+                    <h6 class="text-[9px] font-black uppercase truncate italic px-1">${p.name}</h6>
+                    <p class="text-primary font-black text-[10px] px-1">${p.price} TJS</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
